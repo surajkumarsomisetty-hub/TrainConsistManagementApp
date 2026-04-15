@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class Bogie {
     private String name;
@@ -40,12 +42,28 @@ public class TrainConsistManagementApp {
             System.out.println(bogie);
         }
 
-        // Step 3: Aggregate seating capacity using reduce()
-        int totalSeats = bogies.stream()
-                .map(Bogie::getCapacity)       // extract capacity
-                .reduce(0, Integer::sum);      // sum capacities
+        // Step 3: Regex Validation for Train ID and Cargo Code
+        String trainId = "TRN-1234";      // Example valid input
+        String cargoCode = "PET-AB";      // Example valid input
 
-        // Step 4: Display total seating capacity
-        System.out.println("\nTotal Seating Capacity in Train: " + totalSeats);
+        // Define regex patterns
+        Pattern trainIdPattern = Pattern.compile("TRN-\\d{4}");
+        Pattern cargoCodePattern = Pattern.compile("PET-[A-Z]{2}");
+
+        // Validate Train ID
+        Matcher trainMatcher = trainIdPattern.matcher(trainId);
+        if (trainMatcher.matches()) {
+            System.out.println("\nTrain ID " + trainId + " is VALID.");
+        } else {
+            System.out.println("\nTrain ID " + trainId + " is INVALID.");
+        }
+
+        // Validate Cargo Code
+        Matcher cargoMatcher = cargoCodePattern.matcher(cargoCode);
+        if (cargoMatcher.matches()) {
+            System.out.println("Cargo Code " + cargoCode + " is VALID.");
+        } else {
+            System.out.println("Cargo Code " + cargoCode + " is INVALID.");
+        }
     }
 }
