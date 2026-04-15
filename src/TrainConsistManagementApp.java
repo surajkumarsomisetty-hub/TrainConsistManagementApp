@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 class Bogie {
@@ -29,20 +30,26 @@ public class TrainConsistManagementApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
 
+        // Step 1: Create a List of Bogies
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 54));
         bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 68));   // duplicate type for grouping demo
+        bogies.add(new Bogie("Cylindrical Goods", 100));
+        bogies.add(new Bogie("Rectangular Goods", 120));
 
+        // Step 2: Group bogies by type using Collectors.groupingBy
+        Map<String, List<Bogie>> groupedBogies = bogies.stream()
+                .collect(Collectors.groupingBy(Bogie::getName));
 
-        List<Bogie> highCapacityBogies = bogies.stream()
-                .filter(b -> b.getCapacity() > 60) // condition
-                .collect(Collectors.toList());
-
-
-        System.out.println("\nFiltered Bogies (Capacity > 60):");
-        for (Bogie bogie : highCapacityBogies) {
-            System.out.println(bogie);
+        // Step 3: Display grouped bogies
+        System.out.println("\nGrouped Bogies by Type:");
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println("Type: " + entry.getKey());
+            for (Bogie bogie : entry.getValue()) {
+                System.out.println("  " + bogie);
+            }
         }
     }
 }
