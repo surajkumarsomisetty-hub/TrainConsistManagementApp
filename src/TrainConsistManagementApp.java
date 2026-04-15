@@ -1,50 +1,15 @@
-import java.util.*;
+import java.util.regex.*;
 
-class EmptyTrainException extends Exception {
-    public EmptyTrainException(String msg) {
-        super(msg);
-    }
-}
+class Validator {
 
-class Bogie {
-
-    private String id;
-
-    public Bogie(String id) {
-        this.id = id;
+    public static boolean validateTrainId(String id) {
+        String pattern = "^TRN-\\d{4}$";
+        return Pattern.matches(pattern, id);
     }
 
-    public String getId() {
-        return id;
-    }
-}
-
-class Train {
-
-    private List<Bogie> bogies;
-
-    public Train() {
-        bogies = new ArrayList<>();
-    }
-
-    public void addBogie(Bogie b) {
-        bogies.add(b);
-    }
-
-    public void search(String target) throws EmptyTrainException {
-
-        if (bogies.isEmpty()) {
-            throw new EmptyTrainException("Train has no bogies to search");
-        }
-
-        for (Bogie b : bogies) {
-            if (b.getId().equalsIgnoreCase(target)) {
-                System.out.println("✅ Found Bogie: " + target);
-                return;
-            }
-        }
-
-        System.out.println("❌ Bogie not found: " + target);
+    public static boolean validateCargoCode(String code) {
+        String pattern = "^CG-[A-Z]{3}-\\d{3}$";
+        return Pattern.matches(pattern, code);
     }
 }
 
@@ -52,21 +17,16 @@ class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        Train train = new Train();
+        String trainId1 = "TRN-1234";
+        String trainId2 = "TRAIN12";
 
-        try {
-            train.search("BG101");
-        } catch (EmptyTrainException e) {
-            System.out.println("⚠️ " + e.getMessage());
-        }
+        String cargo1 = "CG-ABC-123";
+        String cargo2 = "CARGO12";
 
-        train.addBogie(new Bogie("BG101"));
-        train.addBogie(new Bogie("BG102"));
+        System.out.println("Train ID " + trainId1 + " → " + Validator.validateTrainId(trainId1));
+        System.out.println("Train ID " + trainId2 + " → " + Validator.validateTrainId(trainId2));
 
-        try {
-            train.search("BG102");
-        } catch (EmptyTrainException e) {
-            System.out.println("⚠️ " + e.getMessage());
-        }
+        System.out.println("\nCargo Code " + cargo1 + " → " + Validator.validateCargoCode(cargo1));
+        System.out.println("Cargo Code " + cargo2 + " → " + Validator.validateCargoCode(cargo2));
     }
 }
